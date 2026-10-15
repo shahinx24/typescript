@@ -5,7 +5,7 @@ type Todo = {
   text: string;
   completed: boolean;
 }
-
+ 
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [text, setText] = useState("")
