@@ -5,10 +5,12 @@ type Todo = {
   text: string;
   completed: boolean;
 }
- 
+
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [text, setText] = useState("")
+  const [editId, setEditId] = useState<number | null>(null);
+  const [editText, setEditText] = useState("");
 
   const addTodo = () => {
     if (text.trim() === "") return;
@@ -22,7 +24,27 @@ export default function App() {
     setTodos([...todos, newTodo]);
     setText("")
   }
- 
+
+  const handleEdit = (todo: Todo) => {
+    setEditId(todo.id);
+    setEditText(todo.text);
+  };
+
+  const saveEdit = (id: number) => {
+    if (editText.trim() === "") return;
+
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id
+          ? { ...todo, text: editText }
+          : todo
+      )
+    );
+
+    setEditId(null);
+    setEditText("");
+  };
+
   const deleteTodo = (id: number) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
@@ -38,7 +60,7 @@ export default function App() {
   };
 
   return (
-   <main>
+    <main>
       <div className="inputDiv">
         <h1>Todo List</h1>
         <input type="text" value={text} onChange={(e) => setText(e.target.value)}
@@ -46,29 +68,60 @@ export default function App() {
         <button onClick={addTodo}>Add</button>
       </div>
       <div>
-       <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => toggleTodo(todo.id)}
-            />
-            <span
-              style={{
-                textDecoration: todo.completed
-                  ? "line-through"
-                  : "none",
-              }}
-            >
-              {todo.text}
-            </span>
-            <button onClick={() => deleteTodo(todo.id)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+        <ul>
+          {todos.map((todo) => (
+            <li key={todo.id}>
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => toggleTodo(todo.id)}
+              />
+
+              {editId === todo.id ? (
+                <>
+                  <input
+                    type="text"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
+
+                  <button onClick={() => saveEdit(todo.id)}>
+                    Save
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditId(null);
+                      setEditText("");
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span
+                    style={{
+                      textDecoration: todo.completed
+                        ? "line-through"
+                        : "none",
+                    }}
+                  >
+                    {todo.text}
+                  </span>
+
+                  <button onClick={() => handleEdit(todo)}>
+                    Edit
+                  </button>
+                </>
+              )}
+
+              <button onClick={() => deleteTodo(todo.id)}>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </main>
   )
