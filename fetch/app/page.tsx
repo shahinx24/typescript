@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <main>
       <h1>Todo List</h1>
-
+      <br/>
       {todos.map((todo) => (
         <p key={todo.id}>{todo.title}</p>
       ))}
