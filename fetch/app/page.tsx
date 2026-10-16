@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 type Todo = {
@@ -14,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     const fetchTodos = async () => {
       const res = await fetch(
-        "https://jsonplaceholder.typicode.com/todos"
+        "https://jsonplaceholder.typicode.com/todos?_limit=10"
       );
 
       const data: Todo[] = await res.json();
@@ -28,7 +27,7 @@ export default function Home() {
     <main>
       <h1>Todo List</h1>
 
-      {todos.slice(0, 10).map((todo) => (
+      {todos.map((todo) => (
         <p key={todo.id}>{todo.title}</p>
       ))}
     </main>
