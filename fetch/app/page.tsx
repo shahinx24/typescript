@@ -1,35 +1,24 @@
-"use client";
-import { useEffect, useState } from "react";
-
 type Todo = {
   id: number;
   title: string;
   completed: boolean;
 };
 
-export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+export default async function Home() {
+  const responce = await fetch(
+    "https://jsonplaceholder.typicode.com/todos?_limit=10"
+  )
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const res = await fetch(
-        "https://jsonplaceholder.typicode.com/todos?_limit=10"
-      );
-
-      const data: Todo[] = await res.json();
-      setTodos(data);
-    };
-
-    fetchTodos();
-  }, []);
+  const todos : Todo[] = await responce.json();
 
   return (
-    <main>
+    <div>
       <h1>Todo List</h1>
       <br/>
-      {todos.map((todo) => (
+      {todos.map((todo)=>(
         <p key={todo.id}>{todo.title}</p>
       ))}
-    </main>
+    </div>
   );
 }
+ 
