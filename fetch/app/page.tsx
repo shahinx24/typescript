@@ -1,24 +1,15 @@
-type Todo = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import { Suspense } from "react";
+import TodoList from "./components/TodoList";
 
-export default async function Home() {
-  const responce = await fetch(
-    "https://jsonplaceholder.typicode.com/todos?_limit=10"
-  )
-
-  const todos : Todo[] = await responce.json();
-
+export default function Home() {
   return (
     <div>
       <h1>Todo List</h1>
-      <br/>
-      {todos.map((todo)=>(
-        <p key={todo.id}>{todo.title}</p>
-      ))}
+      <br />
+
+      <Suspense fallback={<p>Loading todos...</p>}>
+        <TodoList />
+      </Suspense>
     </div>
   );
 }
- 
