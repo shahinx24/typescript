@@ -15,6 +15,7 @@ export default async function TodoList() {
   if (!response.ok) {
     throw new Error("Failed to fetch todos");
   }
+
   const todos: Todo[] = await response.json();
 
   return (
